@@ -1,6 +1,6 @@
 <div align="center">
-    <h1>TeamScript Discord Bot</h1>
-    <p>TeamScript Integrate your webscript with discord and deliver quality to your customers.</p>
+    <h1>Digital Ecoomerce Website - Discord Bot</h1>
+    <p>Digital Ecoomerce Website Integrate your webscript with discord and deliver quality to your customers.</p>
 </div>
 
 ## Features
@@ -20,4 +20,4 @@
 
 ## 📸 | Installation Video
 
-[![TÜRKİYEDE İLK FİVEM DİSCORD MESAİ BOTU!✨](https://img.youtube.com/vi/ki-y4GhhjS0/0.jpg)](https://www.youtube.com/watch?v=ki-y4GhhjS0 "TÜRKİYEDE İLK FİVEM DİSCORD MESAİ BOTU!✨")
+[![DISCORD BOT INSTALLATION ON WINDOWS✨](https://img.youtube.com/vi/ki-y4GhhjS0/0.jpg)](https://www.youtube.com/watch?v=ki-y4GhhjS0 "TÜRKİYEDE İLK FİVEM DİSCORD MESAİ BOTU!✨")
