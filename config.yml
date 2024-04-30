@@ -1,0 +1,18 @@
+debug:
+  logs: true
+general:
+  lang: 'en'
+bot:
+  token: ''
+  status:
+    # The event in the description of the Discord bot; playing = playing, streaming = streaming, listening = listening, watching = watching, competing = competing in a competition.
+    activity: 'watching'
+    # Discord bot description; You can use %usersCount% functions.
+    text: ['%usersCount% Users', 'TeamScript Best Webscript']
+    # If the event in the description of the Discord bot is set to streaming, fill in the twitch section below.
+    twitch: ''
+    # The active part of the Discord bot; online = Active, idle = Idle, dnd = Do Not Disturb, invisible = Offline.
+    status: 'idle'
+server:
+  port: 3000
+  apiKey: ''
