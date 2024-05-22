@@ -20,4 +20,4 @@
 
 ## 📸 | Installation Video
 
-[![DISCORD BOT INSTALLATION ON WINDOWS✨](https://img.youtube.com/vi/ki-y4GhhjS0/0.jpg)](https://www.youtube.com/watch?v=ki-y4GhhjS0 "TÜRKİYEDE İLK FİVEM DİSCORD MESAİ BOTU!✨")
+[![DISCORD BOT INSTALLATION ON WINDOWS✨](https://img.youtube.com/vi/32BrbrNfMv8/0.jpg)](https://youtu.be/32BrbrNfMv8 "DISCORD BOT INSTALLATION ON WINDOWS✨")
