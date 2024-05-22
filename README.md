@@ -1,6 +1,6 @@
 <div align="center">
-    <h1>Digital Ecoomerce Website - Discord Bot</h1>
-    <p>Digital Ecoomerce Website Integrate your webscript with discord and deliver quality to your customers.</p>
+    <h1>Digital Ecommerce Website - Discord Bot</h1>
+    <p>Digital Ecommerce Website Integrate your webscript with discord and deliver quality to your customers.</p>
 </div>
 
 ## Features
