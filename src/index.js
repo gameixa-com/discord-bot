@@ -72,7 +72,7 @@ app.post('/api/giveRole', checkUserAgent, async (req, res) => {
     if (!guild) return res.send({ status: false, message: 'Guild not found!' });
 
     const currentLanguage = client.language;
-    if (body.type === 1 || body.type === '1') {
+    if (body.type === 2 || body.type === '2') {
         if (Array.isArray(body.roles)) body.roles = [...new Set(body.roles)];
         body.roles.forEach(async roleId => {
             if (Array.isArray(roleId)) {
