@@ -17,9 +17,10 @@ module.exports = {
             tr: 'Destek talebini kapatır.'
         }),
         run: async (client, interaction) => {
+            await interaction.deferReply({ ephemeral: true });
             let language = client.langFile;
 
-            if (interaction.channel.parentId !== await sdb.get(`technicalTicketCategory_${interaction.guild.id}`) && interaction.channel.parentId !== await sdb.get(`preSalesTicketCategory_${interaction.guild.id}`)) return await interaction.reply({ content: `${language['This channel is not a support channel!']}`, ephemeral: true });
+            if (interaction.channel.parentId !== await sdb.get(`technicalTicketCategory_${interaction.guild.id}`) && interaction.channel.parentId !== await sdb.get(`preSalesTicketCategory_${interaction.guild.id}`)) return await interaction.editReply({ content: `${language['This channel is not a support channel!']}`, ephemeral: true });
             await client.setupTicketSystem(interaction.guild.id);
             const ticketType = interaction.channel.parentId === await sdb.get(`technicalTicketCategory_${interaction.guild.id}`) ? `${language['Technical Support']}` : `${language['Pre-Sales Support']}`;
             const ticketId = await sdb.get(`ticketId_${interaction.channel.id}`);
@@ -35,11 +36,10 @@ module.exports = {
                 ssr: true
             });
 
-            await client.channels.cache.get(await sdb.get(`ticketLogChannel_${interaction.guild.id}`)).send({ files: [attachment] }).then(async message => {
+            await client.channels.cache.get(await sdb.get(`ticketTranscriptChannel_${interaction.guild.id}`)).send({ files: [attachment] }).then(async message => {
                 await message.attachments.forEach(attachment => {
-                    downloadLink = attachment.url;
+                    downloadLink = attachment.url.replace('https://cdn.discordapp.com', `${config.cdnServer.host}:${config.cdnServer.port}`).split('?ex=')[0];
                 });
-                await message.delete();
             });
 
             const ticketOwner = await sdb.get(`ticketOwner_${interaction.channel.id}`);
@@ -61,7 +61,7 @@ module.exports = {
                 return;
             }
 
-            await interaction.reply({ content: `${language['Support request has been successfully closed!']}`, ephemeral: true });
+            await interaction.editReply({ content: `${language['Support request has been successfully closed!']}`, ephemeral: true });
             await interaction.channel.setParent(await sdb.get(`closedTicketCategory_${interaction.guild.id}`));
 
             interaction.channel.permissionOverwrites.set([

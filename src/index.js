@@ -206,10 +206,11 @@ async function setupTicketSystem(guildId, channel, interaction) {
     let preSalesTicketCategory = sdb.has(`preSalesTicketCategory_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`preSalesTicketCategory_${guildId}`)) : null;
     let closedTicketCategory = sdb.has(`closedTicketCategory_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`closedTicketCategory_${guildId}`)) : null;
     let ticketLogChannel = sdb.has(`ticketLogChannel_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`ticketLogChannel_${guildId}`)) : null;
+    let ticketTranscriptChannel = sdb.has(`ticketTranscriptChannel_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`ticketTranscriptChannel_${guildId}`)) : null;
     let ticketPannelMessageChannel = sdb.has(`ticketPannelMessageChannel_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`ticketPannelMessageChannel_${guildId}`)) : null;
     let ticketPannelMessage = sdb.has(`ticketPannelMessage_${guildId}`) ? ticketPannelMessageChannel ? await ticketPannelMessageChannel.messages.fetch(await sdb.get(`ticketPannelMessage_${guildId}`)).catch(() => {}) : null : null;
 
-    if (ticketStaffRole && technicalTicketCategory && preSalesTicketCategory && closedTicketCategory && ticketLogChannel && ticketPannelMessageChannel && ticketPannelMessage) {
+    if (ticketStaffRole && technicalTicketCategory && preSalesTicketCategory && closedTicketCategory && ticketLogChannel && ticketTranscriptChannel && ticketPannelMessageChannel && ticketPannelMessage) {
         if (interaction) {
             return interaction.editReply({ content: `${language['Ticket system is already installed!']}`, ephemeral: true });
         } else if (channel) {
@@ -283,6 +284,20 @@ async function setupTicketSystem(guildId, channel, interaction) {
         await sdb.set(`ticketLogChannel_${guildId}`, String(newTicketLogChannel.id));
     }
 
+    if (!ticketTranscriptChannel) {
+        const newTicketTranscriptChannel = await client.guilds.cache.get(guildId).channels.create({
+            name: `${language['ticket-transcript']}`,
+            type: ChannelType.GuildText,
+            permissionOverwrites: [
+                {
+                    id: guildId,
+                    deny: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
+                },
+            ],
+        });
+        await sdb.set(`ticketTranscriptChannel_${guildId}`, String(newTicketTranscriptChannel.id));
+    }
+
     if (!ticketPannelMessageChannel) {
         const newTicketPannelMessageChannel = await client.guilds.cache.get(guildId).channels.create({
             name: `${language['ticket-panel']}`,
@@ -351,6 +366,7 @@ async function removeTicketSystem(guildId, channel, interaction) {
     let preSalesTicketCategory = sdb.has(`preSalesTicketCategory_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`preSalesTicketCategory_${guildId}`)) : null;
     let closedTicketCategory = sdb.has(`closedTicketCategory_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`closedTicketCategory_${guildId}`)) : null;
     let ticketLogChannel = sdb.has(`ticketLogChannel_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`ticketLogChannel_${guildId}`)) : null;
+    let ticketTranscriptChannel = sdb.has(`ticketTranscriptChannel_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`ticketTranscriptChannel_${guildId}`)) : null;
     let ticketPannelMessageChannel = sdb.has(`ticketPannelMessageChannel_${guildId}`) ? await client.guilds.cache.get(guildId).channels.cache.get(await sdb.get(`ticketPannelMessageChannel_${guildId}`)) : null;
     let ticketPannelMessage = sdb.has(`ticketPannelMessage_${guildId}`) ? ticketPannelMessageChannel ? await ticketPannelMessageChannel.messages.fetch(await sdb.get(`ticketPannelMessage_${guildId}`)).catch(() => {}) : null : null;
 
@@ -379,6 +395,11 @@ async function removeTicketSystem(guildId, channel, interaction) {
     if (ticketLogChannel) {
         await ticketLogChannel.delete();
         sdb.delete(`ticketLogChannel_${guildId}`);
+    }
+
+    if (ticketTranscriptChannel) {
+        await ticketTranscriptChannel.delete();
+        sdb.delete(`ticketTranscriptChannel_${guildId}`);
     }
 
     if (ticketPannelMessage) {
@@ -427,7 +448,10 @@ client.checkAndCreateLogChannel = checkAndCreateLogChannel;
 
 async function getChannelSize(guildId, categoryId) {
     let channelSize = 0;
-    client.guilds.cache.get(guildId).channels.cache.forEach((channel) => {
+    const guild = await client.guilds.cache.has(guildId) ? await client.guilds.cache.get(guildId) : await client.guilds.fetch(guildId).then(guild => guild).catch(() => null);
+    if (!guild) return channelSize;
+    
+    const x = await guild.channels.cache.forEach((channel) => {
         if (channel.parentId === categoryId) channelSize++;
     });
 
@@ -531,4 +555,5 @@ client.language = config.general.lang;
 
 client.login(config.bot.token).then(async () => {
     app.listen(config.server.port, () => config.general.lang === 'tr' ? console.log(`${config.server.port} portu ile api sunucusu aktif edildi!`) : console.log(`The api server has been activated with port ${config.server.port}!`));
+    const cdnServer = require('./lib/cdnServer');
 });

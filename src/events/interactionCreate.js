@@ -49,11 +49,10 @@ module.exports = {
                     ssr: true
                 });
     
-                await client.channels.cache.get(await sdb.get(`ticketLogChannel_${interaction.guild.id}`)).send({ files: [attachment] }).then(async message => {
+                await client.channels.cache.get(await sdb.get(`ticketTranscriptChannel_${interaction.guild.id}`)).send({ files: [attachment] }).then(async message => {
                     await message.attachments.forEach(attachment => {
-                        downloadLink = attachment.url;
+                        downloadLink = attachment.url.replace('https://cdn.discordapp.com', `${config.cdnServer.host}:${config.cdnServer.port}`).split('?ex=')[0];
                     });
-                    await message.delete();
                 });
 
                 const ticketOwner = await sdb.get(`ticketOwner_${interaction.channel.id}`);
