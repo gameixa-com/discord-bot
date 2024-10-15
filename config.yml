@@ -16,3 +16,7 @@ bot:
 server:
   port: 3000
   apiKey: ''
+cdnServer:
+  # Do not use localhost, use the IP address of the server where the files are located.
+  host: 'http://localhost'
+  port: 5000
